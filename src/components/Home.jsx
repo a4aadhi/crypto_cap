@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import homeStore from "../stores/homeStore";
 
 const Home = () => {
@@ -28,27 +29,28 @@ const Home = () => {
               <p className="text-white">Loading...</p>
             ) : (
               coins.map((coin) => (
-                <div
-                  key={coin.id}
-                  className="shadow-md hover:scale-105 duration-500 py-2 rounded-lg bg-secondary-300 cursor-pointer shadow-black hover:shadow-xl transition-all"
-                >
-                  <img
-                    src={coin.image}
-                    alt={coin.name}
-                    className="w-20 mx-auto"
-                  />
-                  <p className="mt-4 text-white">{coin.name}</p>
-                  <p className="mt-2 text-gray-300">${coin.current_price}</p>
-                  <p
-                    className={`mt-2 ${
-                      coin.price_change_percentage_24h >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
+                <Link key={coin.id} to={`/show/${coin.id}`}>
+                  <div
+                    className="shadow-md hover:scale-105 duration-500 py-2 rounded-lg bg-secondary-300 cursor-pointer shadow-black hover:shadow-xl transition-all"
                   >
-                    {coin.price_change_percentage_24h.toFixed(2)} %
-                  </p>
-                </div>
+                    <img
+                      src={coin.image}
+                      alt={coin.name}
+                      className="w-20 mx-auto"
+                    />
+                    <p className="mt-4 text-white">{coin.name}</p>
+                    <p className="mt-2 text-gray-300">${coin.current_price}</p>
+                    <p
+                      className={`mt-2 ${
+                        coin.price_change_percentage_24h >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {coin.price_change_percentage_24h.toFixed(2)} %
+                    </p>
+                  </div>
+                </Link>
               ))
             )}
           </div>

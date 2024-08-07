@@ -29,18 +29,6 @@ const homeStore = create((set) => ({
       console.error("Error fetching market", error);
     }
   },
-  fetchCoinById: async (coinId) => {
-    try {
-      const res = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}`
-      );
-      console.log("Fetched coin:", res.data);
-      return res.data;
-    } catch (error) {
-      console.error(`Error fetching coin with id ${coinId}`, error);
-      throw error;
-    }
-  },
 }));
 
 export default homeStore;

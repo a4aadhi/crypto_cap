@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import homeStore from "../stores/homeStore";
 
 const Market = () => {
@@ -52,20 +53,28 @@ const Market = () => {
                   </tr>
                 ) : (
                   currentItems.map((coin) => (
-                    <tr key={coin.id} className="bg-secondary-100">
+                    <tr key={coin.id} className="bg-secondary-100 hover:bg-secondary-200">
                       <td className="px-4 py-2">
-                        <img className="w-12 md:w-16 mx-auto" src={coin.image} alt={coin.name} />
+                        <Link to={`/show/${coin.id}`}>
+                          <img className="w-12 md:w-16 mx-auto" src={coin.image} alt={coin.name} />
+                        </Link>
                       </td>
-                      <td className="px-4 py-2">{coin.name}</td>
-                      <td className="px-4 py-2">${coin.current_price.toFixed(2)}</td>
+                      <td className="px-4 py-2">
+                        <Link to={`/show/${coin.id}`}>{coin.name}</Link>
+                      </td>
+                      <td className="px-4 py-2">
+                        <Link to={`/show/${coin.id}`}>${coin.current_price.toFixed(2)}</Link>
+                      </td>
                       <td
                         className={`px-4 py-2 ${
                           coin.price_change_percentage_24h >= 0 ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {coin.price_change_percentage_24h.toFixed(2)}%
+                        <Link to={`/show/${coin.id}`}>{coin.price_change_percentage_24h.toFixed(2)}%</Link>
                       </td>
-                      <td className="px-4 py-2">${coin.market_cap.toLocaleString()}</td>
+                      <td className="px-4 py-2">
+                        <Link to={`/show/${coin.id}`}>${coin.market_cap.toLocaleString()}</Link>
+                      </td>
                     </tr>
                   ))
                 )}
