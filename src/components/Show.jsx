@@ -1,25 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+const CACHE_DURATION = 5 * 60 * 1000; // Cache data for 5 minutes
 
 const Show = () => {
   const { coinId } = useParams();
   const [coin, setCoin] = useState(null);
+  const [lastFetched, setLastFetched] = useState(null);
 
   useEffect(() => {
     const fetchCoin = async () => {
+      const now = Date.now();
+
+      // Check if the cached data is still valid
+      if (lastFetched && now - lastFetched < CACHE_DURATION) {
+        console.log("Using cached data for coin:", coinId);
+        return;
+      }
+
       try {
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/${coinId}`
         );
         const data = await response.json();
         setCoin(data);
+        setLastFetched(now); // Set the timestamp for when the data was fetched
+        console.log("Fetched new coin data for:", coinId);
       } catch (error) {
-        console.error('Error fetching coin details:', error);
+        console.error("Error fetching coin details:", error);
       }
     };
 
     fetchCoin();
-  }, [coinId]);
+  }, [coinId, lastFetched]);
 
   if (!coin) {
     return (
@@ -32,34 +45,40 @@ const Show = () => {
   return (
     <div className="bg-gradient-to-t from-secondary-200 to-secondary-100 min-h-screen flex items-center justify-center p-4">
       <div className="max-w-3xl w-full bg-secondary-300 rounded-lg shadow-lg p-6">
-        <h1 className="text-4xl font-bold mb-4 text-center text-white">{coin.name}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-center text-white">
+          {coin.name}
+        </h1>
         <div className="flex justify-center mb-6">
           <img src={coin.image.large} alt={coin.name} className="w-32 h-32" />
         </div>
         <div className="text-center text-white">
-        <p className="text-2xl mb-2">
+          <p className="text-2xl mb-2">
             <span className="font-semibold">Name : </span> {coin.name.toUpperCase()}
           </p>
           <p className="text-2xl mb-2">
             <span className="font-semibold">Symbol:</span> {coin.symbol.toUpperCase()}
           </p>
           <p className="text-2xl mb-2">
-            <span className="font-semibold">Current Price:</span> ${coin.market_data.current_price.usd.toLocaleString()}
+            <span className="font-semibold">Current Price:</span> $
+            {coin.market_data.current_price.usd.toLocaleString()}
           </p>
           <p className="text-2xl mb-2">
-            <span className="font-semibold">Market Cap:</span> ${coin.market_data.market_cap.usd.toLocaleString()}
+            <span className="font-semibold">Market Cap:</span> $
+            {coin.market_data.market_cap.usd.toLocaleString()}
           </p>
           <p
             className={`text-2xl mb-2 ${
-              coin.market_data.price_change_percentage_24h >= 0 ? 'text-green-600' : 'text-red-600'
+              coin.market_data.price_change_percentage_24h >= 0
+                ? "text-green-600"
+                : "text-red-600"
             }`}
           >
-            <span className="font-semibold">24h Change:</span> {coin.market_data.price_change_percentage_24h.toFixed(2)}%
+            <span className="font-semibold">24h Change:</span>{" "}
+            {coin.market_data.price_change_percentage_24h.toFixed(2)}%
           </p>
           <p className="text-2xl mb-2">
             <span className="font-semibold">Description:</span> {coin.description.en}
           </p>
-          
         </div>
       </div>
     </div>

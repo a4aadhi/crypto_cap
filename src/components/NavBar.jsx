@@ -7,10 +7,9 @@ const NavBar = () => {
   const [nav, setNav] = useState(false);
   const Links = [
     { id: 1, link: "home" },
-    { id: 2, link: "Businesses" },
-    { id: 3, link: "Trade" },
-    { id: 4, link: "Market" },
-    { id: 5, link: "Learn" },
+    { id: 2, link: "Trade" },
+    { id: 3, link: "Market" },
+    { id: 4 , link: "Learn" },
   ];
   return (
     <div className="flex justify-between items-center w-full h-20 px-4 text-white bg-secondary-200 fixed">
